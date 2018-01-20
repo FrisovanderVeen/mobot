@@ -54,7 +54,7 @@ func airhorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func loadAirhornSound() ([][]byte, error) {
-	file, err := os.Open("sound/airhorn.dca")
+	file, err := os.Open("recources/sound/airhorn.dca")
 	if err != nil {
 		return nil, fmt.Errorf("Could not open file: %v", err)
 	}
