@@ -2,6 +2,7 @@ package plugins
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -22,7 +23,7 @@ func help(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if m.Content == fmt.Sprintf("%shelp", Prefix) {
+	if strings.HasPrefix(m.Content, fmt.Sprintf("%shelp", Prefix)) {
 		for _, plugin := range Plugins {
 			if plugin.Help.View {
 				for com, exp := range plugin.Help.Commands {
