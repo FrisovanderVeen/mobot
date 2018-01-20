@@ -1,0 +1,5 @@
+# Config files
+config.toml
+
+# Architecture specific files
+*.exe
