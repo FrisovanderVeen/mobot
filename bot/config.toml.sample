@@ -1,3 +1,6 @@
 [discord]
 Token = "YOUR DISCORD TOKEN HERE"
 Prefix = "-"
+
+[youtube]
+Key = "YOUR GOOGLE KEY HERE"

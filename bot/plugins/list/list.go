@@ -3,18 +3,19 @@ package plugins
 import (
 	"fmt"
 
+	"github.com/FrisovanderVeen/mobot/bot/plugins"
 	"github.com/bwmarrin/discordgo"
 )
 
 var (
-	listHelp = Help{
+	listHelp = plugins.Help{
 		Commands: map[string]string{
-			fmt.Sprintf("%slist", Prefix): "lists all plugins in a text channel",
+			fmt.Sprintf("%slist", plugins.Prefix): "lists all plugins in a text channel",
 		},
 		View:        true,
 		Explanation: "lists all plugins for discord users",
 	}
-	_ = Register("List", listHelp, list)
+	_ = plugins.Register("List", listHelp, list)
 )
 
 func list(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -22,8 +23,8 @@ func list(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if m.Content == fmt.Sprintf("%slist", Prefix) {
-		for name, plugin := range Plugins {
+	if m.Content == fmt.Sprintf("%slist", plugins.Prefix) {
+		for name, plugin := range plugins.Plugins {
 			s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s: %s", name, plugin.Help.Explanation))
 		}
 	}

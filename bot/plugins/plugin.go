@@ -1,8 +1,9 @@
 package plugins
 
 import (
-	"log"
+	"fmt"
 
+	"github.com/FrisovanderVeen/mobot/bot/config"
 	"github.com/bwmarrin/discordgo"
 	"github.com/fatih/color"
 )
@@ -18,6 +19,10 @@ var (
 	WarnChan  = make(chan error)
 	ErrChan   = make(chan error)
 	FatalChan = make(chan error)
+
+	SoundQueue = make(chan *Sound)
+	_          = StartQueue()
+	Config     *config.TomlConfig
 )
 
 // Plugin is a wrapper for a discordgo handler
@@ -39,6 +44,49 @@ type Help struct {
 	Explanation string
 }
 
+type Sound struct {
+	Content [][]byte
+
+	GuildID        string
+	VoiceChannelID string
+	Session        *discordgo.Session
+
+	Name          string
+	Author        string
+	TextChannelID string
+	View          bool
+}
+
+func PlayQueue() {
+	for {
+		sound := <-SoundQueue
+		vc, err := sound.Session.ChannelVoiceJoin(sound.GuildID, sound.VoiceChannelID, false, true)
+		if err != nil {
+			fmt.Errorf("Could not join voice channel: %v", err)
+			continue
+		}
+
+		if sound.View {
+			sound.Session.ChannelMessageSend(sound.TextChannelID, fmt.Sprintf("Now playing: %s by: %s", sound.Name, sound.Author))
+		}
+
+		vc.Speaking(true)
+
+		for _, buf := range sound.Content {
+			vc.OpusSend <- buf
+		}
+
+		vc.Speaking(false)
+
+		vc.Disconnect()
+	}
+}
+
+func StartQueue() interface{} {
+	go PlayQueue()
+	return nil
+}
+
 // Register registers the plugin with the bot
 func Register(name string, help Help, action interface{}) interface{} {
 	switch action := action.(type) {
@@ -53,7 +101,7 @@ func Register(name string, help Help, action interface{}) interface{} {
 			Help:   help,
 		}
 	default:
-		log.Fatalf("Unknown plugin type: %T", action)
+		color.Red("Unknown plugin type plugin: %s, type: %T", name, action)
 		return action
 	}
 	return action

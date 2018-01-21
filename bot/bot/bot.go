@@ -7,9 +7,17 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/FrisovanderVeen/mobot/bot/config"
 	"github.com/FrisovanderVeen/mobot/bot/plugins"
 	"github.com/bwmarrin/discordgo"
 	"github.com/fatih/color"
+
+	_ "github.com/FrisovanderVeen/mobot/bot/plugins/airhorn"
+	_ "github.com/FrisovanderVeen/mobot/bot/plugins/help"
+	_ "github.com/FrisovanderVeen/mobot/bot/plugins/list"
+	_ "github.com/FrisovanderVeen/mobot/bot/plugins/onready"
+	_ "github.com/FrisovanderVeen/mobot/bot/plugins/pingpong"
+	_ "github.com/FrisovanderVeen/mobot/bot/plugins/youtube"
 )
 
 // Bot is a wrapper for a discordgo session
@@ -21,13 +29,13 @@ type Bot struct {
 }
 
 // NewBot creates a new bot based on the settings in the configuration file
-func NewBot(conf string) (*Bot, error) {
-	config, err := getConfig(conf)
+func NewBot(confloc string) (*Bot, error) {
+	conf, err := config.GetConfig(confloc)
 	if err != nil {
 		return nil, err
 	}
 
-	token := config.Discord.Token
+	token := conf.Discord.Token
 	if token == "" {
 		return nil, fmt.Errorf("No token specified")
 	}
@@ -39,7 +47,7 @@ func NewBot(conf string) (*Bot, error) {
 
 	bot := &Bot{
 		Session: dg,
-		Prefix:  config.Discord.Prefix,
+		Prefix:  conf.Discord.Prefix,
 		Exit:    make(chan error),
 	}
 
@@ -63,7 +71,8 @@ func NewBot(conf string) (*Bot, error) {
 	for _, plugin := range plugins.Plugins {
 		bot.Session.AddHandler(plugin.Action)
 	}
-	plugins.Prefix = config.Discord.Prefix
+	plugins.Prefix = conf.Discord.Prefix
+	plugins.Config = conf
 
 	return bot, nil
 }

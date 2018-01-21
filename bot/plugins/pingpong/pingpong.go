@@ -3,19 +3,20 @@ package plugins
 import (
 	"fmt"
 
+	"github.com/FrisovanderVeen/mobot/bot/plugins"
 	"github.com/bwmarrin/discordgo"
 )
 
 var (
-	pingPongHelp = Help{
+	pingPongHelp = plugins.Help{
 		Commands: map[string]string{
-			fmt.Sprintf("%sping", Prefix): "sends Pong! to the text channel",
-			fmt.Sprintf("%spong", Prefix): "sends Ping! to the text channel",
+			fmt.Sprintf("%sping", plugins.Prefix): "sends Pong! to the text channel",
+			fmt.Sprintf("%spong", plugins.Prefix): "sends Ping! to the text channel",
 		},
 		View:        true,
 		Explanation: "replies to pong with Ping! and to ping with Pong!",
 	}
-	_ = Register("PingPong", pingPongHelp, pingPong)
+	_ = plugins.Register("PingPong", pingPongHelp, pingPong)
 )
 
 func pingPong(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -23,11 +24,11 @@ func pingPong(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if m.Content == fmt.Sprintf("%sping", Prefix) {
+	if m.Content == fmt.Sprintf("%sping", plugins.Prefix) {
 		s.ChannelMessageSend(m.ChannelID, "Pong!")
 	}
 
-	if m.Content == fmt.Sprintf("%spong", Prefix) {
+	if m.Content == fmt.Sprintf("%spong", plugins.Prefix) {
 		s.ChannelMessageSend(m.ChannelID, "Ping!")
 	}
 }

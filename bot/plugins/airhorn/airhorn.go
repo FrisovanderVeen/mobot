@@ -6,20 +6,20 @@ import (
 	"io"
 	"os"
 	"strings"
-	"time"
 
+	"github.com/FrisovanderVeen/mobot/bot/plugins"
 	"github.com/bwmarrin/discordgo"
 )
 
 var (
-	airhornHelp = Help{
+	airhornHelp = plugins.Help{
 		Commands: map[string]string{
-			fmt.Sprintf("%sairhorn", Prefix): "plays airhorn in the users current voice channel",
+			fmt.Sprintf("%sairhorn", plugins.Prefix): "plays a airhorn sound in the users current voice channel",
 		},
 		View:        true,
 		Explanation: "annoys people with airhorns",
 	}
-	_ = Register("Airhorn", airhornHelp, airhorn)
+	_ = plugins.Register("Airhorn", airhornHelp, airhorn)
 )
 
 func airhorn(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -27,16 +27,16 @@ func airhorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if strings.HasPrefix(m.Content, fmt.Sprintf("%sairhorn", Prefix)) {
+	if strings.HasPrefix(m.Content, fmt.Sprintf("%sairhorn", plugins.Prefix)) {
 		c, err := s.State.Channel(m.ChannelID)
 		if err != nil {
-			WarnChan <- fmt.Errorf("Could not find channel: %v", err)
+			plugins.WarnChan <- fmt.Errorf("Could not find channel: %v", err)
 			return
 		}
 
 		g, err := s.State.Guild(c.GuildID)
 		if err != nil {
-			WarnChan <- fmt.Errorf("Could not find guild: %v", err)
+			plugins.WarnChan <- fmt.Errorf("Could not find guild: %v", err)
 			return
 		}
 
@@ -44,7 +44,7 @@ func airhorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if vs.UserID == m.Author.ID {
 				err = playAirhornSound(s, g.ID, vs.ChannelID)
 				if err != nil {
-					ErrChan <- fmt.Errorf("Could not play sound: %v")
+					plugins.ErrChan <- fmt.Errorf("Could not play sound: %v")
 				}
 
 				return
@@ -61,7 +61,7 @@ func loadAirhornSound() ([][]byte, error) {
 	defer func() {
 		err := file.Close()
 		if err != nil {
-			ErrChan <- fmt.Errorf("Could not close file: %v", err)
+			plugins.ErrChan <- fmt.Errorf("Could not close file: %v", err)
 		}
 	}()
 
@@ -87,31 +87,19 @@ func loadAirhornSound() ([][]byte, error) {
 	}
 }
 
-func playAirhornSound(s *discordgo.Session, guildID string, channelID string) error {
-	vc, err := s.ChannelVoiceJoin(guildID, channelID, false, true)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		vc.Disconnect()
-	}()
-
-	time.Sleep(250 * time.Millisecond)
-
-	vc.Speaking(true)
-
+func playAirhornSound(s *discordgo.Session, guildID string, voiceChannelID string) error {
 	buffer, err := loadAirhornSound()
 	if err != nil {
 		return fmt.Errorf("load airhorn sound: %v", err)
 	}
 
-	for _, buf := range buffer {
-		vc.OpusSend <- buf
+	plugins.SoundQueue <- &plugins.Sound{
+		View:           false,
+		Content:        buffer,
+		Session:        s,
+		GuildID:        guildID,
+		VoiceChannelID: voiceChannelID,
 	}
-
-	vc.Speaking(false)
-
-	time.Sleep(250 * time.Millisecond)
 
 	return nil
 }
