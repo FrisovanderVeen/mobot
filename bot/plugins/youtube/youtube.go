@@ -20,7 +20,11 @@ import (
 
 var (
 	youtubeHelp = plugins.Help{
-		Commands:    map[string]string{},
+		Commands: map[string]string{
+			fmt.Sprintf("%splay", plugins.Prefix):   "Queries youtube for the given term and gives options to choose.",
+			fmt.Sprintf("%schoose", plugins.Prefix): "Chooses one of the options from play.",
+			fmt.Sprintf("%scancel", plugins.Prefix): "Cancels the play query.",
+		},
 		View:        true,
 		Explanation: "plays audio of youtube videos in the users voice channel",
 	}
@@ -181,8 +185,6 @@ func youtubeFunc(s *discordgo.Session, m *discordgo.MessageCreate) {
 				return
 			}
 		}
-
-		delete(queries, m.Author.ID)
 	case strings.HasPrefix(m.Content, fmt.Sprintf("%scancel", plugins.Prefix)):
 		_, ok := queries[m.Author.ID]
 		if !ok {

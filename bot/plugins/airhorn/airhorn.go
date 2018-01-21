@@ -14,7 +14,7 @@ import (
 var (
 	airhornHelp = plugins.Help{
 		Commands: map[string]string{
-			fmt.Sprintf("%sairhorn", plugins.Prefix): "plays a airhorn sound in the users current voice channel",
+			fmt.Sprintf("%sairhorn", plugins.Prefix): "Plays a airhorn sound in the users current voice channel.",
 		},
 		View:        true,
 		Explanation: "annoys people with airhorns",

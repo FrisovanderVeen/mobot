@@ -14,7 +14,6 @@ import (
 
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/airhorn"
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/help"
-	_ "github.com/FrisovanderVeen/mobot/bot/plugins/list"
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/onready"
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/pingpong"
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/youtube"

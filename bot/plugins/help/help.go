@@ -11,7 +11,7 @@ import (
 var (
 	helpHelp = plugins.Help{
 		Commands: map[string]string{
-			fmt.Sprintf("%shelp", plugins.Prefix): "sends all commands and their uses to the text channel",
+			fmt.Sprintf("%shelp", plugins.Prefix): "Lists all commands and their uses.",
 		},
 		View:        true,
 		Explanation: "gives help to the discord users",
@@ -24,7 +24,8 @@ func help(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if strings.HasPrefix(m.Content, fmt.Sprintf("%shelp", plugins.Prefix)) {
+	switch {
+	case strings.HasPrefix(m.Content, fmt.Sprintf("%shelp", plugins.Prefix)):
 		for _, plugin := range plugins.Plugins {
 			if plugin.Help.View {
 				for com, exp := range plugin.Help.Commands {

@@ -10,8 +10,8 @@ import (
 var (
 	pingPongHelp = plugins.Help{
 		Commands: map[string]string{
-			fmt.Sprintf("%sping", plugins.Prefix): "sends Pong! to the text channel",
-			fmt.Sprintf("%spong", plugins.Prefix): "sends Ping! to the text channel",
+			fmt.Sprintf("%sping", plugins.Prefix): "Sends Pong! to the text channel.",
+			fmt.Sprintf("%spong", plugins.Prefix): "Sends Ping! to the text channel.",
 		},
 		View:        true,
 		Explanation: "replies to pong with Ping! and to ping with Pong!",

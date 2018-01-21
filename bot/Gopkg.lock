@@ -8,6 +8,24 @@
   version = "v0.3.0"
 
 [[projects]]
+  name = "github.com/PuerkitoBio/goquery"
+  packages = ["."]
+  revision = "a41cf096e64e3752d7683898d5746bc0b98ee213"
+  version = "v1.2.0"
+
+[[projects]]
+  name = "github.com/Sirupsen/logrus"
+  packages = ["."]
+  revision = "d682213848ed68c0a260ca37d6dd5ace8423f5ba"
+  version = "v1.0.4"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/andybalholm/cascadia"
+  packages = ["."]
+  revision = "349dd0209470eabd9514242c688c403c0926d266"
+
+[[projects]]
   name = "github.com/bwmarrin/discordgo"
   packages = ["."]
   revision = "4a33b9bc7c56cfdb9bb244e33e83cb3941fe2bdc"
@@ -26,6 +44,18 @@
   version = "v1.2.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/jonas747/dca"
+  packages = ["."]
+  revision = "01f9985f4a26c29c2b4f5a7c133395e1aa6fffca"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/jonas747/ogg"
+  packages = ["."]
+  revision = "b4f6f4cf3757a3bf88eae9222045b99b9d76d8ca"
+
+[[projects]]
   name = "github.com/mattn/go-colorable"
   packages = ["."]
   revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
@@ -36,6 +66,12 @@
   packages = ["."]
   revision = "0360b2af4f38e8d38c7fce2a9f4e702702d73a39"
   version = "v0.0.3"
+
+[[projects]]
+  name = "github.com/rylio/ytdl"
+  packages = ["."]
+  revision = "bd30f781270fa4d6df59e2a49948cd157030a2c6"
+  version = "v0.5.1"
 
 [[projects]]
   name = "github.com/urfave/cli"
@@ -49,19 +85,46 @@
   packages = [
     "nacl/secretbox",
     "poly1305",
-    "salsa20/salsa"
+    "salsa20/salsa",
+    "ssh/terminal"
   ]
   revision = "a6600008915114d9c087fad9f03d75087b1a74df"
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/net"
+  packages = [
+    "context",
+    "context/ctxhttp",
+    "html",
+    "html/atom"
+  ]
+  revision = "5ccada7d0a7ba9aeb5d3aca8d3501b4c2a509fec"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/sys"
-  packages = ["unix"]
+  packages = [
+    "unix",
+    "windows"
+  ]
   revision = "2c42eef0765b9837fbdab12011af7830f55f88f0"
+
+[[projects]]
+  branch = "master"
+  name = "google.golang.org/api"
+  packages = [
+    "gensupport",
+    "googleapi",
+    "googleapi/internal/uritemplates",
+    "googleapi/transport",
+    "youtube/v3"
+  ]
+  revision = "85dbeadc18ffa798f2716d8c48a2c1153470743a"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "dbc8a367bab8ee2602436bd8c650c4917dd4e209f583b99b048efac415fb5465"
+  inputs-digest = "cfa3833f88d558a632f68583f4da7bd40f18f7d751ab50b771d60bb2c2bc48b1"
   solver-name = "gps-cdcl"
   solver-version = 1
