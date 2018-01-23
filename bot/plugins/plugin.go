@@ -10,26 +10,34 @@ import (
 
 var (
 	// Plugins is a map of all plugins for the bot
-	Plugins = make(map[string]Plugin)
+	Plugins = make(map[string]*Plugin)
 	// Prefix is the prefix of all commands for the bot
 	Prefix string
 
-	// Channels for information and errors
-	InfChan   = make(chan string)
-	WarnChan  = make(chan error)
-	ErrChan   = make(chan error)
+	// InfChan for information
+	InfChan = make(chan string)
+	// WarnChan for warnings
+	WarnChan = make(chan error)
+	// ErrChan for errors that are not fatal
+	ErrChan = make(chan error)
+	// FatalChan for errors that are fatal
 	FatalChan = make(chan error)
 
+	// SoundQueue is a queue for sound being played
 	SoundQueue = make(chan *Sound)
 	_          = StartQueue()
-	Config     *config.TomlConfig
+
+	// Config for plugins to use
+	Config *config.TomlConfig
 )
 
 // Plugin is a wrapper for a discordgo handler
 type Plugin struct {
 	Action interface{}
 
-	Help Help
+	Help    Help
+	Name    string
+	Enabled bool
 }
 
 // Help is a collection of some useful fields for users
@@ -62,7 +70,7 @@ func PlayQueue() {
 		sound := <-SoundQueue
 		vc, err := sound.Session.ChannelVoiceJoin(sound.GuildID, sound.VoiceChannelID, false, true)
 		if err != nil {
-			fmt.Errorf("Could not join voice channel: %v", err)
+			ErrChan <- fmt.Errorf("Could not join voice channel: %v", err)
 			continue
 		}
 
@@ -104,9 +112,10 @@ func Register(name string, help Help, action interface{}) interface{} {
 			}
 		}
 
-		Plugins[name] = Plugin{
+		Plugins[name] = &Plugin{
 			Action: action,
 			Help:   help,
+			Name:   name,
 		}
 	default:
 		color.Red("Unknown plugin type plugin: %s, type: %T", name, action)

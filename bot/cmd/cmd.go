@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-var Version = "test"
+var version = "0.1"
 var helpTemplate = `NAME:
 {{.Name}} - {{.Usage}}
 DESCRIPTION:
@@ -21,7 +21,7 @@ FLAGS:
 	{{range .Flags}}{{.}}
 	{{end}}{{end}}
 VERSION:
-` + Version +
+` + version +
 	`{{ "\n"}}`
 
 var globalFlags = []cli.Flag{
@@ -32,12 +32,12 @@ var globalFlags = []cli.Flag{
 	},
 }
 
-//Cmd is a command-line application
+// Cmd is a command-line application
 type Cmd struct {
 	*cli.App
 }
 
-//New creates a new client
+// NewApp creates a new client
 func NewApp() *Cmd {
 	app := cli.NewApp()
 	app.Name = "Crep Bot"

@@ -12,10 +12,15 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/fatih/color"
 
+	// the airhorn plugin being registered
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/airhorn"
+	// The help plugin being registered
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/help"
+	// The onready plugin being registered
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/onready"
+	// The pingpong plugin being registered
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/pingpong"
+	// The youtube plugin being registered
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/youtube"
 )
 
@@ -67,13 +72,34 @@ func NewBot(confloc string) (*Bot, error) {
 		}
 	}()
 
-	for _, plugin := range plugins.Plugins {
-		bot.Session.AddHandler(plugin.Action)
+	for name, opts := range conf.Plugins {
+		addPlugins(name, opts, bot, conf)
 	}
+
 	plugins.Prefix = conf.Discord.Prefix
 	plugins.Config = conf
 
 	return bot, nil
+}
+
+func addPlugins(name string, opts config.Plugin, bot *Bot, conf *config.TomlConfig) {
+	for _, plugin := range plugins.Plugins {
+		if name == plugin.Name {
+			if opts.Enabled {
+				bot.Session.AddHandler(plugin.Action)
+				plugin.Enabled = true
+				return
+			} else if !opts.Enabled {
+				return
+			}
+		}
+	}
+
+	if opts.Necessary {
+		plugins.FatalChan <- fmt.Errorf("Plugin necessary but not present: %s", name)
+	} else {
+		plugins.WarnChan <- fmt.Errorf("Plugin specified in config but not present: %s", name)
+	}
 }
 
 // Run runs the bot and exits if CTRL-C is pressed or if there is a fatal error

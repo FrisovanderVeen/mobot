@@ -4,3 +4,24 @@ Prefix = "-"
 
 [youtube]
 Key = "YOUR GOOGLE KEY HERE"
+
+[plugins]
+    [plugins.Help]
+    necessary = true
+    enabled = true
+
+    [plugins.OnReady]
+    necessary = true
+    enabled = true
+
+    [plugins.PingPong]
+    necessary = false
+    enabled = true
+
+    [plugins.Airhorn]
+    necessary = false
+    enabled = true
+
+    [plugins.Youtube]
+    necessary = false
+    enabled = true

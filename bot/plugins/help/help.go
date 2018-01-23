@@ -27,10 +27,14 @@ func help(s *discordgo.Session, m *discordgo.MessageCreate) {
 	switch {
 	case strings.HasPrefix(m.Content, fmt.Sprintf("%shelp", plugins.Prefix)):
 		for _, plugin := range plugins.Plugins {
-			if plugin.Help.View {
-				for com, exp := range plugin.Help.Commands {
-					s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s%s: %s", plugins.Prefix, com, exp))
+			if plugin.Enabled {
+				if plugin.Help.View {
+					for com, exp := range plugin.Help.Commands {
+						s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("%s%s: %s", plugins.Prefix, com, exp))
+					}
 				}
+			} else {
+				fmt.Println("test")
 			}
 		}
 	}

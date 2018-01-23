@@ -44,7 +44,7 @@ func airhorn(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if vs.UserID == m.Author.ID {
 				err = playAirhornSound(s, g.ID, vs.ChannelID)
 				if err != nil {
-					plugins.ErrChan <- fmt.Errorf("Could not play sound: %v")
+					plugins.ErrChan <- fmt.Errorf("Could not play sound: %v", err)
 				}
 
 				return
