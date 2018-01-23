@@ -52,6 +52,7 @@ type Help struct {
 	Explanation string
 }
 
+// Sound is a wrapper for encoded bytes
 type Sound struct {
 	Content [][]byte
 
@@ -65,6 +66,7 @@ type Sound struct {
 	View          bool
 }
 
+// PlayQueue plays the queue
 func PlayQueue() {
 	for {
 		sound := <-SoundQueue
@@ -90,6 +92,7 @@ func PlayQueue() {
 	}
 }
 
+// StartQueue starts the queue
 func StartQueue() interface{} {
 	go PlayQueue()
 	return nil
@@ -103,8 +106,8 @@ func Register(name string, help Help, action interface{}) interface{} {
 			if plugname == name {
 				color.Yellow("[WARNING]: 2 or more plugins with the same name detected this may cause unwanted effects: %s", name)
 			}
-			for com1, _ := range plug.Help.Commands {
-				for com2, _ := range help.Commands {
+			for com1 := range plug.Help.Commands {
+				for com2 := range help.Commands {
 					if com1 == com2 {
 						color.Yellow("[WARNING]: 2 or more commands with the same name detected this will cause unwanted effects: %s", name)
 					}
