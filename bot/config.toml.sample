@@ -25,3 +25,7 @@ Key = "YOUR GOOGLE KEY HERE"
     [plugins.Youtube]
     necessary = false
     enabled = true
+
+    [plugins.Audio]
+    necessary = false
+    enabled = true

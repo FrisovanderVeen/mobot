@@ -25,7 +25,9 @@ var (
 
 	// SoundQueue is a queue for sound being played
 	SoundQueue = make(chan *Sound)
-	_          = StartQueue()
+	// SkipSiq is a signal to skip the currently playing item
+	SkipSig = make(chan interface{})
+	_       = StartQueue()
 
 	// Config for plugins to use
 	Config *config.TomlConfig
@@ -83,8 +85,14 @@ func PlayQueue() {
 		vc.Speaking(true)
 
 		for _, buf := range sound.Content {
-			vc.OpusSend <- buf
+			select {
+			case <-SkipSig:
+				goto done
+			default:
+				vc.OpusSend <- buf
+			}
 		}
+	done:
 
 		vc.Speaking(false)
 

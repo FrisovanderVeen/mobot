@@ -22,6 +22,8 @@ import (
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/pingpong"
 	// The youtube plugin being registered
 	_ "github.com/FrisovanderVeen/mobot/bot/plugins/youtube"
+	// The audio plugin being registered
+	_ "github.com/FrisovanderVeen/mobot/bot/plugins/audio"
 )
 
 // Bot is a wrapper for a discordgo session
